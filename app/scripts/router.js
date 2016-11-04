@@ -2,6 +2,7 @@ import $ from 'jquery';
 import Backbone from 'backbone';
 //collections
 import Posts from './collections/Posts';
+import Users from './collections/Users';
 //models
 import Session from './models/Session';
 //views
@@ -18,6 +19,7 @@ import headers from './headers';
 const container = $('.container');
 let session = new Session();
 let posts = new Posts();
+let users = new Users();
 
 //.ajaxSend header control
 headers(session);
@@ -85,6 +87,7 @@ const Router = Backbone.Router.extend({
       posts.fetch();
       container.empty();
       let postList = new PostList({
+        session: session,
         collection: posts
       });
       let allPosts = new NavView({

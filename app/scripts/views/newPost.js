@@ -21,11 +21,12 @@ export default Backbone.View.extend({
   submitEvt(e) {
     e.preventDefault();
     let body = this.$('.postBody').val();
-    let Owner = this.model.get('user-token');
+    let owner = this.model.get('user-token');
+    let userName = this.model.get('userName');
     this.collection.create(
-      {body},
+      {body, userName},
       {
-        headers: {'user-token': Owner},
+        headers: {'user-token': owner},
         success() {
           console.log('post created');
         }

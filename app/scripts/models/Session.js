@@ -5,6 +5,11 @@ import config from '../config';
 
 export default Backbone.Model.extend({
   idAttribute: '_id',
+  // initialize() {
+  //   if (window.localStorage.getItem('user-token')) {
+  //     this.set('user-token', window.localStorage.getItem('user-token'));
+  //   }
+  // },
   register(email, password, name) {
     this.save(
       {email, password, name},
@@ -28,6 +33,7 @@ export default Backbone.Model.extend({
         success: (response) => {
           // console.log(response);
           console.log('Successfuly logged in.');
+          window.localStorage.setItem('user-token', response.get('user-token'));
           router.navigate('allPosts', {trigger: true});
         },
         error: function(response) {
