@@ -11,6 +11,7 @@ import LoginForm from './views/login';
 import RegisterForm from './views/register';
 import PostForm from './views/newPost';
 import PostList from './views/postList';
+import ProfileData from './views/userProfile';
 
 //other req. files
 import config from './config';
@@ -30,11 +31,12 @@ const Router = Backbone.Router.extend({
     'login'   : 'login',
     'register': 'signUp',
     'post'    : 'submitPost',
-    'allPosts': 'viewAll'
+    'feed': 'viewAll',
+    'profile' : 'userProfile'
   },
   home() {
     if (session.get('user-token')) {
-      this.navigate('allPosts', {trigger: true});
+      this.navigate('feed', {trigger: true});
     } else {
       this.navigate('login', {trigger: true});
     }
@@ -48,7 +50,6 @@ const Router = Backbone.Router.extend({
     container.empty();
     loginPage.render();
     container.append(loginPage.el);
-    console.log(session);
   },
   signUp() {
     container.empty();
@@ -59,7 +60,6 @@ const Router = Backbone.Router.extend({
     });
     registerPage.render();
     container.append(registerPage.el);
-    console.log(session);
   },
   submitPost() {
     if (!session.get('user-token')) {
@@ -78,7 +78,6 @@ const Router = Backbone.Router.extend({
       postPage.render();
       container.append(postPage.el);
     }
-    console.log(session);
   },
   viewAll() {
     if (!session.get('user-token')) {
@@ -98,7 +97,21 @@ const Router = Backbone.Router.extend({
       allPosts.render();
       container.append(allPosts.el);
     }
-    console.log(session);
+  },
+  userProfile() {
+
+    container.empty();
+    console.log(session.get('user-token'));
+    posts.fetch({url: `https://api.backendless.com/v1/data/Posts?where=` + escape(`ownerId='${session.get('ownerId')}'`)});
+    console.log(posts);
+    let profileData = new ProfileData();
+    let postList = new PostList({
+      session: session,
+      collection: posts
+    });
+    let userProfile = new NavView({children: [profileData, postList]});
+    userProfile.render();
+    container.append(userProfile.el);
   }
 });
 

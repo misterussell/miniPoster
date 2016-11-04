@@ -8,6 +8,7 @@ export default Backbone.Model.extend({
   // initialize() {
   //   if (window.localStorage.getItem('user-token')) {
   //     this.set('user-token', window.localStorage.getItem('user-token'));
+  //     this.set('userName', window.localStorage.getItem('userName'));
   //   }
   // },
   register(email, password, name) {
@@ -34,7 +35,8 @@ export default Backbone.Model.extend({
           // console.log(response);
           console.log('Successfuly logged in.');
           window.localStorage.setItem('user-token', response.get('user-token'));
-          router.navigate('allPosts', {trigger: true});
+          window.localStorage.setItem('userName', response.get('userName'));
+          router.navigate('feed', {trigger: true});
         },
         error: function(response) {
           // console.log(response);
