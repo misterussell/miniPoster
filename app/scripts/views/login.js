@@ -4,7 +4,6 @@ import Backbone from 'backbone';
 export default Backbone.View.extend({
 
   tagName: 'form',
-  // className: 'login-signup',
   template() {
     let baseline = `
       <input type="text" class="email" name="email" placeholder="Email" value="maxruss.87@gmail.com">

@@ -1,6 +1,9 @@
+import $ from 'jquery';
 import Backbone from 'backbone';
 
-export default function() {
+import config from './config';
+
+export default function(session) {
 
 return $(document).ajaxSend((evt, xhr, opts) => {
 	xhr.setRequestHeader('application-id', config.appId);

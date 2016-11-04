@@ -11,11 +11,10 @@ export default Backbone.Model.extend({
       {
         url: 'https://api.backendless.com/v1/users/register',
         success: (response) => {
-          console.log(response);
           this.login(email, password);
         },
         error: (response) => {
-          console.log(response);
+          // console.log(response);
           console.log('User data not saved to server.');
         }
       }
@@ -27,10 +26,12 @@ export default Backbone.Model.extend({
       {
         url: 'https://api.backendless.com/v1/users/login',
         success: (response) => {
-          console.log(response);
+          // console.log(response);
+          console.log('Successfuly logged in.');
+          router.navigate('allPosts', {trigger: true});
         },
         error: function(response) {
-          console.log(response);
+          // console.log(response);
           alert('Log in not successful. Please try again.');
         }
     });

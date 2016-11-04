@@ -1,3 +1,4 @@
+import $ from 'backbone';
 import Backbone from 'backbone';
 
 export default Backbone.View.extend({
@@ -11,6 +12,7 @@ export default Backbone.View.extend({
     return postOptions;
   },
   render() {
+    this.$el.empty();
     this.$el.append(this.template());
   },
   events: {
@@ -18,7 +20,16 @@ export default Backbone.View.extend({
   },
   submitEvt(e) {
     e.preventDefault();
-    let body = $('.postBody').val();
-    console.log(body);
+    let body = this.$('.postBody').val();
+    let Owner = this.model.get('user-token');
+    this.collection.create(
+      {body},
+      {
+        headers: {'user-token': Owner},
+        success() {
+          console.log('post created');
+        }
+      }
+    );
   }
 });

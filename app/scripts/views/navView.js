@@ -12,10 +12,13 @@ export default Backbone.View.extend({
     this.children.forEach((child, i, arr) => {
       if (child.collection) {
         child.collection.on('update', () => { child.render(); });
+        // console.log('collection rendering child');
       }
       if (child.model) {
         child.model.on('change', () => { child.render(); });
+        // console.log('model rendering child');
       }
+
       child.render();
       this.$el.append(child.el);
     });
