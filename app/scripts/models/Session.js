@@ -7,14 +7,15 @@ import headers from '../headers';
 
 export default Backbone.Model.extend({
   idAttribute: '_id',
-  // initialize() {
+  initialize() {
   //   console.log(this);
-  //   if (window.localStorage.getItem('user-token')) {
-  //     let id = window.localStorage.getItem('user-token');
+    if (window.localStorage.getItem('user-token')) {
+      let id = window.localStorage.getItem('user-token');
   //     headers(this.set('user-token', `${id}`));
-  //     this.set('userName', window.localStorage.getItem('userName'));
-  //   }
-  // },
+      this.set('userName', window.localStorage.getItem('userName'));
+      this.set('user-token', window.localStorage.getItem('user-token'));
+    }
+  },
   register(email, password, name) {
     this.save(
       {email, password, name},
@@ -54,6 +55,7 @@ export default Backbone.Model.extend({
 			success: () => {
 				this.clear();
 				window.localStorage.clear();
+        router.navigate('', {trigger: true});
 			}
 		});
 	},

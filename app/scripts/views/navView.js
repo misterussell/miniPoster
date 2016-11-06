@@ -4,6 +4,7 @@ import Nav from './nav';
 export default Backbone.View.extend({
   initialize(opts) {
     this.children = opts.children || [];
+    console.log(this.model);
   },
   render() {
     let nav = new Nav({model: this.model});

@@ -28,8 +28,10 @@ export default Backbone.View.extend({
     this.$el.append(this.template());
     if (this.model.get('ownerId') === this.session.get('ownerId')) {
       let editButton = `<button class="edit">Edit</button>`;
+      let saveButton = $(`<button class="save">Save</button">`);
       let deleteButton = `<button class="delete" value="Delete">Delete</button>`;
-      this.$el.append(editButton, deleteButton);
+      this.$el.append(editButton, saveButton, deleteButton);
+      $('.save').hide();
     }
   },
   events: {
@@ -41,6 +43,12 @@ export default Backbone.View.extend({
   },
   delete(e) {
     e.preventDefault();
-    this.model.destroy(this.model);
+    $.ajax({
+      url: `https://api.backendless.com/v1/data/Posts/` + `${this.model.get('objectId')}`,
+      type: 'DELETE',
+      success(response) {
+        console.log(response);
+      }
+    });
   }
 });

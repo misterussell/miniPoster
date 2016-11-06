@@ -53,12 +53,12 @@ const Router = Backbone.Router.extend({
     container.append(loginPage.el);
   },
   signUp() {
-    container.empty();
     let registerForm = new RegisterForm({model: session});
     let registerPage = new NavView({
       model: session,
       children: [registerForm]
     });
+    container.empty();
     registerPage.render();
     container.append(registerPage.el);
   },
@@ -100,19 +100,21 @@ const Router = Backbone.Router.extend({
     }
   },
   myProfile() {
-    container.empty();
     posts.fetch({url: `https://api.backendless.com/v1/data/Posts?where=` + escape(`ownerId='${session.get('ownerId')}'`)});
     console.log(session);
     console.log(posts);
-    let profileData = new ProfileData({model: session});
+    let profileData = new ProfileData({model: session, session: session});
     let postList = new PostList({collection: posts, session});
-    let userProfile = new NavView({children: [profileData, postList]});
+    let userProfile = new NavView({model: session, children: [profileData, postList]});
+    container.empty();
     userProfile.render();
     container.append(userProfile.el);
   },
   userProfile(id) {
     // console.log(id, session.get('ownerId'));
-    if(id === session.get('ownerId')) {
+    if (!session.get('user-token')) {
+      this.navigate('', {trigger: true});
+    } else if (id === session.get('ownerId')) {
       // if id = session id navigate to my profile
       this.navigate('profile', {trigger: true});
     } else {
@@ -121,10 +123,9 @@ const Router = Backbone.Router.extend({
       user.get({url: `https://api.backendless.com/v1/data/Users?where=` + escape(`ownerId='${id}'`)});
       posts.fetch({url: `https://api.backendless.com/v1/data/Posts?where=` + escape(`ownerId='${id}'`)});
       console.log(user, users);
-
       let profileData = new ProfileData({model: users});
       let postList = new PostList({collection: posts, session: user});
-      let userProfile = new NavView({children: [profileData, postList]});
+      let userProfile = new NavView({model: session, session: session, children: [profileData, postList]});
       container.empty();
       userProfile.render();
       container.append(userProfile.el);
