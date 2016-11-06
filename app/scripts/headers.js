@@ -10,6 +10,7 @@ return $(document).ajaxSend((evt, xhr, opts) => {
 	xhr.setRequestHeader('secret-key', config.secret);
 	xhr.setRequestHeader('application-type', 'REST');
 	if (session.get('user-token')) {
+		console.log(session.get(`user-token`));
 		xhr.setRequestHeader('user-token', session.get('user-token'));
 	}
 });

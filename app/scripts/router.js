@@ -31,8 +31,9 @@ const Router = Backbone.Router.extend({
     'login'   : 'login',
     'register': 'signUp',
     'post'    : 'submitPost',
-    'feed': 'viewAll',
-    'profile' : 'userProfile'
+    'feed'    : 'viewAll',
+    'profile' : 'myProfile',
+    'user/:id': 'userProfile'
   },
   home() {
     if (session.get('user-token')) {
@@ -98,20 +99,36 @@ const Router = Backbone.Router.extend({
       container.append(allPosts.el);
     }
   },
-  userProfile() {
-
+  myProfile() {
     container.empty();
-    console.log(session.get('user-token'));
     posts.fetch({url: `https://api.backendless.com/v1/data/Posts?where=` + escape(`ownerId='${session.get('ownerId')}'`)});
+    console.log(session);
     console.log(posts);
-    let profileData = new ProfileData();
-    let postList = new PostList({
-      session: session,
-      collection: posts
-    });
+    let profileData = new ProfileData({model: session});
+    let postList = new PostList({collection: posts, session});
     let userProfile = new NavView({children: [profileData, postList]});
     userProfile.render();
     container.append(userProfile.el);
+  },
+  userProfile(id) {
+    // console.log(id, session.get('ownerId'));
+    if(id === session.get('ownerId')) {
+      // if id = session id navigate to my profile
+      this.navigate('profile', {trigger: true});
+    } else {
+      let user = new Session();
+      users.fetch({url: `https://api.backendless.com/v1/data/Users?where=` + escape(`ownerId='${id}'`)});
+      user.get({url: `https://api.backendless.com/v1/data/Users?where=` + escape(`ownerId='${id}'`)});
+      posts.fetch({url: `https://api.backendless.com/v1/data/Posts?where=` + escape(`ownerId='${id}'`)});
+      console.log(user, users);
+
+      let profileData = new ProfileData({model: users});
+      let postList = new PostList({collection: posts, session: user});
+      let userProfile = new NavView({children: [profileData, postList]});
+      container.empty();
+      userProfile.render();
+      container.append(userProfile.el);
+    }
   }
 });
 

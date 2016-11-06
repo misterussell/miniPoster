@@ -1,13 +1,17 @@
+import $ from 'jquery';
 import Backbone from 'backbone';
 
 import router from '../router';
 import config from '../config';
+import headers from '../headers';
 
 export default Backbone.Model.extend({
   idAttribute: '_id',
   // initialize() {
+  //   console.log(this);
   //   if (window.localStorage.getItem('user-token')) {
-  //     this.set('user-token', window.localStorage.getItem('user-token'));
+  //     let id = window.localStorage.getItem('user-token');
+  //     headers(this.set('user-token', `${id}`));
   //     this.set('userName', window.localStorage.getItem('userName'));
   //   }
   // },
