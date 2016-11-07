@@ -11,9 +11,10 @@ export default Backbone.Model.extend({
   //   console.log(this);
     if (window.localStorage.getItem('user-token')) {
       let id = window.localStorage.getItem('user-token');
-  //     headers(this.set('user-token', `${id}`));
+
       this.set('userName', window.localStorage.getItem('userName'));
       this.set('user-token', window.localStorage.getItem('user-token'));
+      this.set('ownerId', window.localStorage.getItem('ownerId'));
     }
   },
   register(email, password, name) {
@@ -41,6 +42,7 @@ export default Backbone.Model.extend({
           console.log('Successfuly logged in.');
           window.localStorage.setItem('user-token', response.get('user-token'));
           window.localStorage.setItem('userName', response.get('userName'));
+          window.localStorage.setItem('ownerId', response.get('ownerId'));
           router.navigate('feed', {trigger: true});
         },
         error: function(response) {

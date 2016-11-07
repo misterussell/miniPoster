@@ -123,7 +123,7 @@ const Router = Backbone.Router.extend({
       user.get({url: `https://api.backendless.com/v1/data/Users?where=` + escape(`ownerId='${id}'`)});
       posts.fetch({url: `https://api.backendless.com/v1/data/Posts?where=` + escape(`ownerId='${id}'`)});
       console.log(user, users);
-      let profileData = new ProfileData({model: users});
+      let profileData = new ProfileData({model: users, session: session});
       let postList = new PostList({collection: posts, session: user});
       let userProfile = new NavView({model: session, session: session, children: [profileData, postList]});
       container.empty();

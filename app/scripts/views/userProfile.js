@@ -8,18 +8,18 @@ export default Backbone.View.extend({
   },
   tagName: 'ul',
   template() {
-    return `
+    return $(`
       <li class="userName">User Name:${this.model.get('userName')}</li>
-      <li class="bio">About Me: ${this.model.get('bio')}</li>
+      <li class="bio">${this.model.get('bio')}</li>
       <li class="creationDate">Profile Created:${this.model.get('created')}</li>
-    `;
+    `);
   },
   render() {
     this.$el.append(this.template());
     if (this.model.get('ownerId') === this.session.get('ownerId')) {
-      let editButton = $(`<button class="edit">Edit</button>`);
-      let saveButton = $(`<button class="save">Save</button">`);
-      this.$('bio').append(editButton, saveButton);
+      let editButton = $(`<button class="editBio">Edit</button>`);
+      let saveButton = $(`<button class="saveBio">Save</button">`);
+      this.$el.append(editButton, saveButton);
       $(saveButton).hide();
     }
     this.model.on('change', () => {
@@ -29,22 +29,34 @@ export default Backbone.View.extend({
     });
   },
   events: {
-    'click .edit' : 'edit',
-    'click .save' : 'save'
+    'click .editBio' : 'edit',
+    'click .saveBio' : 'save'
   },
   edit(e) {
     e.preventDefault();
     console.log('clicked');
-    // $('.edit').hide();
-    e.hide();
-    $('.bio').attr('contenteditable', 'true');
-    $('.save').show();
+    $('.editBio').hide();
+    this.$('.bio').attr('contenteditable', 'true');
+    $('.saveBio').show();
   },
   save(e) {
     e.preventDefault();
     console.log('clicked');
-    e.hide();
-    $('.bio').removeAttr('contenteditable');
-    $('.edit').show();
+    this.$('.bio').removeAttr('contenteditable');
+    let newBio = this.$('.bio').val();
+    console.log(newBio);
+    // $.ajax({
+    //   url: `https://api.backendless.com/v1/data/Users/` + this.model.get('ownerId'),
+    //   type: 'PUT',
+    //   data: {
+    //     'bio': newBio
+    //   },
+    //   success() {
+    //     console.log('added');
+    //   }
+    // });
+    this.$('.bio').removeAttr('contenteditable');
+    $('.saveBio').hide();
+    $('.editBio').show();
   }
 });
