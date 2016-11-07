@@ -6,8 +6,8 @@ export default Backbone.View.extend({
   tagName: 'form',
   template() {
     let baseline = `
-      <input type="text" class="email" name="email" placeholder="Email" value="maxruss.87@gmail.com">
-      <input type="password" class="pw" name="password" placeholder="Password" value="555">
+      <input type="text" class="email" name="email" placeholder="Email" value="">
+      <input type="password" class="pw" name="password" placeholder="Password" value="">
       <input type="submit" class="submit" value="Log In">
     `;
     return baseline;
